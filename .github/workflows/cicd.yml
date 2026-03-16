@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 env:
-  IMAGE_NAME: ghcr.io/coregate/${{ github.event.repository.name }}
+  IMAGE_NAME: ghcr.io/coregatekit/${{ github.event.repository.name }}
 
 jobs:
   build:
