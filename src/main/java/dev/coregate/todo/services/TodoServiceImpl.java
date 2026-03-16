@@ -2,9 +2,11 @@ package dev.coregate.todo.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import dev.coregate.todo.models.Todo;
 import dev.coregate.todo.models.TodoDTO;
 import dev.coregate.todo.repositories.TodoRepository;
 
@@ -18,8 +20,9 @@ public class TodoServiceImpl implements TodoService {
 
   @Override
   public List<TodoDTO> getAllTodos() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getAllTodos'");
+    return todoRepository.findAll().stream()
+      .map(this::convertToDTO)
+      .collect(Collectors.toList());
   }
 
   @Override
@@ -52,4 +55,12 @@ public class TodoServiceImpl implements TodoService {
     throw new UnsupportedOperationException("Unimplemented method 'deleteTodoById'");
   }
 
+  private TodoDTO convertToDTO(Todo todo) {
+    return new TodoDTO(
+      todo.getId(),
+      todo.getName(),
+      todo.getDescription(),
+      todo.isCompleted()
+    );
+  }
 }
