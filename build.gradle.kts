@@ -22,7 +22,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
-	implementation(platform("me.paulschwarz:spring-dotenv-bom:$version"))
+	implementation(platform("me.paulschwarz:spring-dotenv-bom:5.1.0"))
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
   developmentOnly("me.paulschwarz:springboot4-dotenv")
 	runtimeOnly("org.postgresql:postgresql")
