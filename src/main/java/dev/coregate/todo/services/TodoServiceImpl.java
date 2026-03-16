@@ -50,19 +50,28 @@ public class TodoServiceImpl implements TodoService {
       return convertToDTO(updatedTodo);
     }
 
-    throw new TodoNotFoundException("Todo not found with id: " + id);
+    throw new TodoNotFoundException(id);
   }
 
   @Override
   public void toggleTodoCompleted(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'toggleTodoCompleted'");
+    Optional<Todo> existingTodo = todoRepository.findById(id);
+    if (existingTodo.isPresent()) {
+      Todo todo = existingTodo.get();
+      todo.setCompleted(!todo.isCompleted());
+      todoRepository.save(todo);
+    } else {
+      throw new TodoNotFoundException(id);
+    }
   }
 
   @Override
   public void deleteTodoById(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteTodoById'");
+    if (todoRepository.existsById(id)) {
+      todoRepository.deleteById(id);
+    } else {
+      throw new TodoNotFoundException(id);
+    }
   }
 
   private TodoDTO convertToDTO(Todo todo) {
