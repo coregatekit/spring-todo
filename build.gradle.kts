@@ -24,7 +24,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation(platform("me.paulschwarz:spring-dotenv-bom:5.1.0"))
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-  developmentOnly("me.paulschwarz:springboot4-dotenv")
+	developmentOnly("me.paulschwarz:springboot4-dotenv:5.1.0")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
