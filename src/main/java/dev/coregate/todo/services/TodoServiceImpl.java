@@ -27,8 +27,7 @@ public class TodoServiceImpl implements TodoService {
 
   @Override
   public Optional<TodoDTO> getTodoById(Long id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getTodoById'");
+    return todoRepository.findById(id).map(this::convertToDTO);
   }
 
   @Override
