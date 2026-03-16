@@ -32,8 +32,9 @@ public class TodoServiceImpl implements TodoService {
 
   @Override
   public TodoDTO saveTodo(TodoDTO todoDTO) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'saveTodo'");
+    Todo todo = convertToEntity(todoDTO);
+    Todo savedTodo = todoRepository.save(todo);
+    return convertToDTO(savedTodo);
   }
 
   @Override
@@ -61,5 +62,13 @@ public class TodoServiceImpl implements TodoService {
       todo.getDescription(),
       todo.isCompleted()
     );
+  }
+
+  private Todo convertToEntity(TodoDTO todoDTO) {
+    Todo todo = new Todo();
+    todo.setName(todoDTO.name());
+    todo.setDescription(todoDTO.description());
+    todo.setCompleted(todoDTO.completed());
+    return todo;
   }
 }
