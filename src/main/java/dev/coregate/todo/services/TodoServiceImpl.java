@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import dev.coregate.todo.exceptions.TodoNotFoundException;
 import dev.coregate.todo.models.Todo;
 import dev.coregate.todo.models.TodoDTO;
 import dev.coregate.todo.repositories.TodoRepository;
@@ -39,8 +40,17 @@ public class TodoServiceImpl implements TodoService {
 
   @Override
   public TodoDTO updateTodo(Long id, TodoDTO todoDTO) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateTodo'");
+    Optional<Todo> existingTodo = todoRepository.findById(id);
+    if (existingTodo.isPresent()) {
+      Todo todo = existingTodo.get();
+      todo.setName(todoDTO.name());
+      todo.setDescription(todoDTO.description());
+      todo.setCompleted(todoDTO.completed());
+      Todo updatedTodo = todoRepository.save(todo);
+      return convertToDTO(updatedTodo);
+    }
+
+    throw new TodoNotFoundException("Todo not found with id: " + id);
   }
 
   @Override
