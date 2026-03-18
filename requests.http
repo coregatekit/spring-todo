@@ -1,0 +1,38 @@
+@base=https://api-todo-dev.coregate.dev/api
+
+### Get all todos
+GET {{base}}/todos
+
+### Get a specific todo by ID
+@id=2
+GET {{base}}/todos/{{id}}
+
+### Create a new todo
+POST {{base}}/todos
+Content-Type: application/json
+
+{
+  "name": "Buy groceries",
+  "description": "Milk, Bread, Eggs",
+  "completed": false
+}
+
+### Update an existing todo
+@id=2
+PUT {{base}}/todos/{{id}}
+Content-Type: application/json
+
+{
+  "name": "Buy groceries and snacks",
+  "description": "Milk, Bread, Eggs, Chips",
+  "completed": false
+}
+
+### Mark a todo as completed
+@id=2
+PATCH {{base}}/todos/{{id}}
+
+### Delete a todo
+@id=1
+DELETE {{base}}/todos/{{id}}
+
