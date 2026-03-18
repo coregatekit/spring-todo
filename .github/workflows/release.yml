@@ -2,7 +2,8 @@ name: Test, Build and Deploy (Development)
 
 on:
   push:
-    branches: [main]
+    tags:
+      - 'v*.*.*'
 
 env:
   IMAGE_NAME: ghcr.io/coregatekit/${{ github.event.repository.name }}
@@ -13,13 +14,17 @@ jobs:
     permissions:
       contents: read
       packages: write
+    
+    outputs:
+      tag: ${{ steps.vars.outputs.tag }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Set short SHA
-        run: echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+      - name: Set image tag from Git tag
+        id: vars
+        run: echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
 
       - name: Set up JDK 25
         uses: actions/setup-java@v4
@@ -54,7 +59,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag }}
+            ${{ env.IMAGE_NAME }}:latest
 
   deploy:
     needs: build
@@ -71,10 +77,10 @@ jobs:
           token: ${{ secrets.GITOPS_TOKEN }}
           path: gitops
 
-      - name: Update image tag in dev
+      - name: Update image tag in prod
         run: |
-          cd gitops/apps/spring-todo/overlays/dev
-          sed -i "s/newTag: .*/newTag: ${{ env.IMAGE_TAG }}/" kustomization.yaml
+          cd gitops/apps/spring-todo/overlays/prod
+          sed -i "s/newTag: .*/newTag: ${{ needs.build.outputs.tag }}/" kustomization.yaml
 
       - name: Commit and push changes
         run: |
@@ -82,7 +88,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-          git add apps/spring-todo/overlays/dev/kustomization.yaml
-          git commit -m "Update image tag to ${{ env.IMAGE_TAG }} (dev)" || echo "No changes to commit"
+          git add apps/spring-todo/overlays/prod/kustomization.yaml
+          git commit -m "Update image tag to ${{ needs.build.outputs.tag }} (prod)" || echo "No changes to commit"
 
           git push
