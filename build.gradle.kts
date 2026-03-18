@@ -23,6 +23,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation(platform("me.paulschwarz:spring-dotenv-bom:5.1.0"))
+	// Source: https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("me.paulschwarz:springboot4-dotenv:5.1.0")
 	runtimeOnly("org.postgresql:postgresql")
